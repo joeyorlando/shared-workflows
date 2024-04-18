@@ -1,0 +1,9 @@
+name: Hello World
+runs:
+  using: composite
+  steps:
+    - name: Say Hello
+      id: whats-up
+      shell: sh
+      run: |
+        echo "Hello World"
