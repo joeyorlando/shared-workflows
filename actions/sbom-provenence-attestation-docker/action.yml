@@ -27,7 +27,7 @@ runs:
   steps:
     # https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
     - name: Attest build provenance
-      uses: actions/attest-build-provenance@f8d5ea8082b0d9f5ab855907be308fbd7eefb155 # v1.1.0
+      uses: actions/attest-build-provenance@951c0c5f8e375ad4efad33405ab77f7ded2358e4 # v1.1.1
       with:
         push-to-registry: ${{ inputs.push }}
         subject-digest: ${{ inputs.digest }}
@@ -41,7 +41,7 @@ runs:
         output-file: sbom.cyclonedx.json
 
     - name: Attest SBOM
-      uses: actions/attest-sbom@7d87da1e33596bc5503e50993d8f68c7a9bdfb4d # v1.1.0
+      uses: actions/attest-sbom@c29e4e92259a5ed4629496ec6a5724e444389a1f # v1.1.1
       with:
         push-to-registry: ${{ inputs.push }}
         sbom-path: sbom.cyclonedx.json
