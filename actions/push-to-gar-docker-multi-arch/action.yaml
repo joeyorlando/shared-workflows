@@ -29,6 +29,6 @@ runs:
         ref: "multiarch-docker-builds-using-sh-runners"
         path: _shared-workflows-push-to-gar-docker-multi-arch
     - name: env-var
-      uses: "./_shared-workflows-push-to-gar-docker-multi-arch/actions/resolve-architectures"
+      uses: grafana/shared-workflows/actions/resolve-architectures@multiarch-docker-builds-using-sh-runners
       with: 
         platforms: ${{ inputs.platforms }}
