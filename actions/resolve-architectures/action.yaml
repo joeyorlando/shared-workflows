@@ -6,19 +6,7 @@ on:
       platform:
         required: true
         type: string
-
-jobs:
-  try-reusable:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: "read"
-      id-token: "write"  
-    steps:
-      - id: checkout
-        name: Checkout
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
   
-
 runs:
   using: composite
   steps:
