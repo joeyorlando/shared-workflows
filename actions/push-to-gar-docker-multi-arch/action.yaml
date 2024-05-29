@@ -1,0 +1,34 @@
+name: Push to artifact registry
+description: Composite action to push to Google Artifact Registry
+on:
+  workflow_call:
+    inputs:
+      platforms:
+        description: desc
+        required: true
+        type: string
+
+# env:
+#   platform_env: ${{ inputs.platforms }}
+
+runs:
+  using: composite
+  steps:
+    - id: print
+      shell: bash
+      run: echo "exposing env var"
+    - name: Checkout shared workflows
+      env:
+        # In a composite action, these two need to be indirected via the
+        # environment, as per the GitHub actions documentation:
+        # https://docs.github.com/en/actions/learn-github-actions/contexts
+        action_repo: ${{ github.action_repository }}
+        action_ref: ${{ github.action_ref }}
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      with:
+        ref: "multiarch-docker-builds-using-sh-runners"
+        path: _shared-workflows-push-to-gar-docker-multi-arch
+    - name: env-var
+      uses: "./_shared-workflows-push-to-gar-docker-multi-arch/actions/resolve-architectures"
+      with: 
+        platforms: ${{ inputs.platforms }}

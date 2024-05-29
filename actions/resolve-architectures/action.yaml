@@ -1,0 +1,32 @@
+name: Resolve architectures for Docker image builds
+description: Composite action to resolve architectures for Docker image builds
+inputs:
+  platforms:
+    description: |
+      List of platforms to build the image for
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve platform name
+      shell: bash
+      run: |
+        declare -a arr=()
+          
+        for platform_input in $(echo "${{ inputs.platforms }}" | sed "s/,/ /g")
+        do
+          platform=$(echo ${platform_input} | cut -d "/" -f 2)
+          if [ "${platform}" == "arm64" ]; then
+            arr+=("arm64")
+          elif [ "${platform}" == "amd64" ]; then
+            arr+=("x64")
+          else
+            echo "Invalid architecture. Valid architectures: arm64, amd64"
+            exit 1
+          fi
+        done
+
+        arr_string=$(IFS=, ; echo "${arr[*]}")
+          
+        echo "Resolved platforms: ${arr_string}"
