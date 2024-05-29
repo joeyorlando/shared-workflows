@@ -6,28 +6,57 @@ on:
       platform:
         required: true
         type: string
-  
-runs:
-  using: composite
-  steps:
-    - name: Resolve platform name
-      shell: bash
-      run: |
-        declare -a arr=()
-          
-        for platform_input in $(echo "${{ inputs.platforms }}" | sed "s/,/ /g")
-        do
-          platform=$(echo ${platform_input} | cut -d "/" -f 2)
-          if [ "${platform}" == "arm64" ]; then
-            arr+=("arm64")
-          elif [ "${platform}" == "amd64" ]; then
-            arr+=("x64")
-          else
-            echo "Invalid architecture. Valid architectures: arm64, amd64"
-            exit 1
-          fi
-        done
 
-        arr_string=$(IFS=, ; echo "${arr[*]}")
+jobs:
+  try-reusable:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: "read"
+      id-token: "write"  
+    steps:
+      - name: Resolve platform name
+        run: |
+          declare -a arr=()
           
-        echo "Resolved platforms: ${arr_string}"
+          for platform_input in $(echo "${{ inputs.platforms }}" | sed "s/,/ /g")
+          do
+            platform=$(echo ${platform_input} | cut -d "/" -f 2)
+            if [ "${platform}" == "arm64" ]; then
+              arr+=("arm64")
+            elif [ "${platform}" == "amd64" ]; then
+              arr+=("x64")
+            else
+              echo "Invalid architecture. Valid architectures: arm64, amd64"
+              exit 1
+            fi
+          done
+
+          arr_string=$(IFS=, ; echo "${arr[*]}")
+          
+          echo "Resolved platforms: ${arr_string}"
+  
+
+# runs:
+#   using: composite
+#   steps:
+#     - name: Resolve platform name
+#       shell: bash
+#       run: |
+#         declare -a arr=()
+          
+#         for platform_input in $(echo "${{ inputs.platforms }}" | sed "s/,/ /g")
+#         do
+#           platform=$(echo ${platform_input} | cut -d "/" -f 2)
+#           if [ "${platform}" == "arm64" ]; then
+#             arr+=("arm64")
+#           elif [ "${platform}" == "amd64" ]; then
+#             arr+=("x64")
+#           else
+#             echo "Invalid architecture. Valid architectures: arm64, amd64"
+#             exit 1
+#           fi
+#         done
+
+#         arr_string=$(IFS=, ; echo "${arr[*]}")
+          
+#         echo "Resolved platforms: ${arr_string}"
